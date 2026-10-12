@@ -8,6 +8,11 @@ const createAppointment = async (req, res) => {
       return res.status(400).json({ message: 'All appointment fields are required' });
     }
 
+    const today = new Date().toISOString().split('T')[0];
+    if (date < today) {
+      return res.status(400).json({ message: 'Appointment date cannot be in the past' });
+    }
+
     const appointment = await Appointment.create({
       patientName,
       doctorName,
@@ -29,13 +34,17 @@ const createAppointment = async (req, res) => {
 
 const getAppointments = async (req, res) => {
   try {
-    let appointments;
+    let query = {};
 
-    if (req.user.role === 'Admin') {
-      appointments = await Appointment.find().sort({ createdAt: -1 });
-    } else {
-      appointments = await Appointment.find({ userId: req.user.id }).sort({ createdAt: -1 });
+    if (req.user.role !== 'Admin') {
+      query.userId = req.user.id;
     }
+
+    if (req.query.status) {
+      query.status = req.query.status;
+    }
+
+    const appointments = await Appointment.find(query).sort({ createdAt: -1 });
 
     res.json(appointments);
   } catch (error) {
@@ -71,6 +80,13 @@ const updateAppointment = async (req, res) => {
 
     if (req.user.role !== 'Admin' && appointment.userId.toString() !== req.user.id) {
       return res.status(403).json({ message: 'Access denied to update this appointment' });
+    }
+
+    if (req.body.status) {
+      const allowedStatuses = ['Pending', 'Confirmed', 'Completed', 'Cancelled'];
+      if (!allowedStatuses.includes(req.body.status)) {
+        return res.status(400).json({ message: 'Invalid status value' });
+      }
     }
 
     const updatedAppointment = await Appointment.findByIdAndUpdate(
