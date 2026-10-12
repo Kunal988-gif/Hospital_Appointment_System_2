@@ -1,16 +1,28 @@
-# React + Vite
+# Hospital Appointment System - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend for the Hospital Appointment System built using React and Vite.
 
-Currently, two official plugins are available:
+## Features
+- User authentication (Login / Register) with roles (User & Admin)
+- User can book new appointments and view their booked appointments
+- Admin can manage all appointments (change status or delete)
+- Basic React with useState and useEffect (no React Router)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## How to Run
 
-## React Compiler
+1. Install dependencies:
+```bash
+npm install
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+2. Make sure `.env` has:
+```env
+VITE_API_URL=http://localhost:5001/api
+```
 
-## Expanding the ESLint configuration
+3. Start Vite dev server:
+```bash
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Open browser at `http://localhost:5173`.
